@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GitSim — Simulator Git Interaktif</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+        <div class="brand">
+          <div class="logo"></div>
+          <span>GitSim</span>
+        </div>
+        <div class="module-list" id="module-list"></div>
+        <div class="sidebar-footer">
+          <div class="progress-ring" id="sidebar-progress" style="--p: 0">
+            <span>0%</span>
+          </div>
+          <span class="progress-label">Penyelesaian</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button
+          class="icon-btn"
+          id="btn-menu"
+          title="Tampilkan/sembunyikan daftar modul"
+          aria-label="Tampilkan atau sembunyikan daftar modul"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M2 4h12v1.5H2zm0 3.5h12V9H2zm0 3.5h12v1.5H2z" />
+          </svg>
+        </button>
+        <div class="topbar-title">
+          <span class="title" id="module-title">Pilih Modul</span>
+        </div>
+        <button class="btn-ghost" id="btn-why" hidden>Penjelasan</button>
+        <button class="btn-ghost" id="btn-reset" hidden>Atur Ulang</button>
+        <button class="btn-ghost" id="btn-inspector">Riwayat &amp; Berkas</button>
+      </header>
+
+      <div class="terminal-container">
+        <div class="terminal-window">
+          <div
+            class="terminal"
+            id="terminal"
+            role="log"
+            aria-live="polite"
+          ></div>
+          <div class="hint-box is-hidden" id="hint-box">
+            <div class="hint-content">
+              <span class="hint-label">Berikutnya</span>
+              <span class="hint-step" id="hint-step"></span>
+              <code id="hint-cmd"></code>
+              <span class="hint-desc" id="hint-desc"></span>
+            </div>
+            <button class="hint-btn" id="btn-autofill">Isi</button>
+          </div>
+        </div>
+
+        <form class="cmd-form" id="cmd-form" autocomplete="off">
+          <span class="prompt" id="prompt">$</span>
+          <input
+            type="text"
+            id="cmd-input"
+            placeholder="Masukkan perintah Git…"
+            spellcheck="false"
+            autocomplete="off"
+            autofocus
+          />
+        </form>
+      </div>
+    </main>
+
+    <aside class="inspector">
+      <div class="resizer" id="resizer" title="Geser untuk mengubah lebar"></div>
+      <section class="panel panel-history">
+        <header class="panel-head">
+          <span>Riwayat Commit</span>
+          <div class="head-tools">
+            <div class="legend">
+              <span class="lg local"></span> Lokal
+              <span class="lg remote"></span> GitHub
+            </div>
+            <button
+              class="icon-btn small"
+              id="btn-wide"
+              title="Perlebar graph"
+              aria-label="Perlebar graph"
+            >
+              ⤢
+            </button>
+          </div>
+        </header>
+        <div class="history-graph" id="history-graph"></div>
+        <div class="commit-detail" id="commit-detail"></div>
+      </section>
+
+      <section class="panel panel-files">
+        <header class="panel-head">
+          <span>Berkas</span>
+          <button
+            class="icon-btn small"
+            id="btn-newfile"
+            title="Buat berkas"
+            aria-label="Buat berkas"
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+              <path
+                d="M7.25 2h1.5v5.25H14v1.5H8.75V14h-1.5V8.75H2v-1.5h5.25z"
+              />
+            </svg>
+          </button>
+        </header>
+        <div class="file-zones">
+          <div class="zone">
+            <div class="zone-title">
+              Direktori Kerja <span id="count-working" class="count">0</span>
+            </div>
+            <div id="files-working" class="file-list"></div>
+          </div>
+          <div class="zone">
+            <div class="zone-title">
+              Area Staging <span id="count-staged" class="count">0</span>
+            </div>
+            <div id="files-staged" class="file-list"></div>
+          </div>
+        </div>
+      </section>
+    </aside>
+
+    <div class="modal-back" id="modal-back" hidden>
+      <div class="modal">
+        <header class="modal-head">
+          <h2 id="modal-title"></h2>
+          <button class="icon-btn" id="modal-close" aria-label="Tutup">
+            ×
+          </button>
+        </header>
+        <div class="modal-body" id="modal-body"></div>
+      </div>
+    </div>
+
+    <form class="modal-back" id="newfile-modal" hidden>
+      <div class="modal">
+        <header class="modal-head"><h2>Buat Berkas Baru</h2></header>
+        <div class="modal-body modal-form">
+          <input
+            type="text"
+            id="nf-name"
+            placeholder="nama-berkas.txt"
+            required
+          />
+          <textarea
+            id="nf-body"
+            placeholder="isi berkas (opsional)"
+            rows="4"
+          ></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-ghost" id="nf-cancel">Batal</button>
+          <button type="submit" class="btn-primary">Simpan</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="git-engine.js"></script>
+    <script src="scenarios.js"></script>
+    <script src="brain.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
