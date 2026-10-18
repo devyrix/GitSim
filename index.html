@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -34,8 +34,8 @@
         <button
           class="icon-btn"
           id="btn-menu"
-          title="Tampilkan/sembunyikan daftar modul"
-          aria-label="Tampilkan atau sembunyikan daftar modul"
+          title="Sembunyikan panel samping"
+          aria-label="Sembunyikan panel samping"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M2 4h12v1.5H2zm0 3.5h12V9H2zm0 3.5h12v1.5H2z" />
@@ -44,9 +44,10 @@
         <div class="topbar-title">
           <span class="title" id="module-title">Pilih Modul</span>
         </div>
+        <span class="step-count" id="step-count" hidden></span>
+        <div class="spacer"></div>
         <button class="btn-ghost" id="btn-why" hidden>Penjelasan</button>
         <button class="btn-ghost" id="btn-reset" hidden>Atur Ulang</button>
-        <button class="btn-ghost" id="btn-inspector">Riwayat &amp; Berkas</button>
       </header>
 
       <div class="terminal-container">
@@ -60,7 +61,6 @@
           <div class="hint-box is-hidden" id="hint-box">
             <div class="hint-content">
               <span class="hint-label">Berikutnya</span>
-              <span class="hint-step" id="hint-step"></span>
               <code id="hint-cmd"></code>
               <span class="hint-desc" id="hint-desc"></span>
             </div>
@@ -83,24 +83,21 @@
     </main>
 
     <aside class="inspector">
-      <div class="resizer" id="resizer" title="Geser untuk mengubah lebar"></div>
       <section class="panel panel-history">
         <header class="panel-head">
           <span>Riwayat Commit</span>
-          <div class="head-tools">
-            <div class="legend">
-              <span class="lg local"></span> Lokal
-              <span class="lg remote"></span> GitHub
-            </div>
-            <button
-              class="icon-btn small"
-              id="btn-wide"
-              title="Perlebar graph"
-              aria-label="Perlebar graph"
-            >
-              ⤢
-            </button>
+          <div class="legend">
+            <span class="lg local"></span>Lokal
+            <span class="lg remote"></span>GitHub
           </div>
+          <button
+            class="icon-btn small"
+            id="btn-wide"
+            title="Perlebar graph"
+            aria-label="Perlebar graph"
+          >
+            ⤢
+          </button>
         </header>
         <div class="history-graph" id="history-graph"></div>
         <div class="commit-detail" id="commit-detail"></div>
@@ -137,6 +134,11 @@
           </div>
         </div>
       </section>
+      <div
+        class="resizer"
+        id="resizer"
+        title="Geser untuk mengubah lebar"
+      ></div>
     </aside>
 
     <div class="modal-back" id="modal-back" hidden>

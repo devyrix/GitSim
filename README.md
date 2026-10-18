@@ -26,10 +26,9 @@ GitSim/
   index.html      kerangka UI
   styles.css      tampilan
   git-engine.js   mesin Git: commit, branch, merge, remote
-  scenarios.js    9 modul latihan
+  scenarios.js    8 modul latihan
   brain.js        render graph, berkas, detail commit
   app.js          pengendali UI
-  preview.js      miniatur SVG
   test.js         uji mesin Git dan tiap modul
   smoke.js        uji cepat: berkas lengkap, skrip termuat, modul jalan
 ```

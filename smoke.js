@@ -47,18 +47,18 @@ globalThis.document = {
 };
 globalThis.localStorage = { getItem: () => null, setItem() {} };
 globalThis.matchMedia = () => ({ matches: false });
-for (const f of ["git-engine", "scenarios", "brain", "preview"]) {
+for (const f of ["git-engine", "scenarios", "brain"]) {
   check("muat " + f + ".js", () => require(here(f + ".js")));
 }
 
-check("SCENARIOS berisi 9 modul", () => {
-  if (!Array.isArray(SCENARIOS) || SCENARIOS.length !== 9) throw new Error("jumlah: " + (SCENARIOS || []).length);
+check("SCENARIOS berisi 8 modul", () => {
+  if (!Array.isArray(SCENARIOS) || SCENARIOS.length !== 8) throw new Error("jumlah: " + (SCENARIOS || []).length);
 });
 
 check("setiap modul punya kontrak dasar", () => {
   const bads = [];
   for (const s of SCENARIOS) {
-    for (const k of ["id", "num", "group", "title", "subtitle", "files", "opts", "steps", "why"])
+    for (const k of ["id", "num", "title", "subtitle", "files", "opts", "steps", "why"])
       if (s[k] === undefined) bads.push(s.id + ": " + k);
     if (typeof s.check !== "function") bads.push(s.id + ": check()");
     for (const st of s.steps) if (!st.cmd && !st.cmdAt) bads.push(s.id + ": langkah tanpa cmd");
@@ -80,7 +80,6 @@ for (const s of SCENARIOS) {
     const g = Brain.renderHistory(st);
     const f = Brain.renderFiles(st, "working");
     const d = Brain.renderCommit(st, null);
-    const m = Preview.svg ? "" : "";
     for (const [n, v] of [["graph", g], ["files", f], ["detail", d]]) {
       if (typeof v !== "string") throw new Error(n + " bukan string");
       if (/undefined|\[object Object\]/.test(v)) throw new Error(n + " berisi undefined");
